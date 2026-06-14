@@ -1,0 +1,26 @@
+TESTING TAMPLATE
+Test Schedule
+The table below outlines the specific timeline, allocation of responsibilities, and status for each testing phase conducted over the final weeks of the academic project schedule.
+
+Test ID	Testing Phase	Description / Scope	Target Date	Responsibility	Status
+TS-01:	Unit Testing	Validating Cloud Functions, token generation rules, and database schema constraints.	Week 11	Ali	Completed
+TS-02:	Integration Testing	Testing communication between the React frontend forms and Firebase Auth/Firestore services.	Week 12	Ali / Yasir	Completed
+TS-03:	System & Security Testing	End-to-end walkthrough (QR generation to scan verification) and validating Firestore security rules.	Week 12	Yasir	Completed
+TS-04:	Usability Testing	Evaluating the guard dashboard workflow and scanner responsiveness under low-light conditions.	Week 13	Yasir	Completed
+TS-05:	Regression Testing	Re-testing the full system after final bug fixes and layout adjustments before final deployment.	Week 13	Yasir	Completed
+
+
+
+
+
+Test Cases and Results 
+The table below contains the details about how the test cases created at the system design stage in ‘ch4.docx' were executed. All test cases were run to verify the behavior of the system in the production environment, known as the 'ready' staging environme
+
+Test ID	Module / Feature	Test Description	Expected Outcome	Actual Outcome	Executed By	Status
+TC-01:	Visitor Pre-registration	Resident inputs guest name, phone, date, and purpose into Guest Portal.	Visitor pass created in Firestore under visitors/{passId} with a unique random token.	Visitor record successfully saved; random token generated.	yasir	Passed
+TC-02:	QR Code Generation	Resident generates and downloads entry pass from Guest Portal.	A high-contrast, downloadable QR pass is generated containing only the secure random token.	QR code generated perfectly via qrcode.react with secure pass ID.	yasir	Passed
+TC-03:	Valid QR Verification	Security Guard scans an active, unused visitor QR code at the gate dashboard.	Cloud Function verifies token, updates used flag to true, and logs "Approved".	Cloud Function atomically verified token and marked it used.	Yasir	Passed
+TC-04:	Expired QR Scan	Security Guard scans a QR code where the current date is past the expiresAt value.	System rejects entry, shows "Access Denied", and logs an expired attempt.	Token rejected by Cloud Function backend; access denied.	Yasir	Passed
+TC-05:	Duplicate QR Scan	Security Guard scans a QR code that has already been used (used: true).	System denies entry, alerts guard of reuse, and logs a duplicate attempt.	System displayed "Invalid/Used Code" and blocked entry.	Yasir	Passed
+TC-06:	Real-Time Notifications	Cloud Function triggers after a successful gate verification event.	Automated email/SMS alert dispatched instantly to the hosting resident.	Resident received notification within 2 seconds of the gate scan.	Yasir	Passed
+TC-07:	Role-Based Authorization	Non-admin user attempts to access client logs or change user roles.	Firestore Security Rules block the database read/write request.	Unauthorized database actions successfully blocked by security rules.	Yasir	Passed
